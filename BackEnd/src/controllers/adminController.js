@@ -32,3 +32,10 @@ const getUsers = (req, res) => {
         res.json(rows);
     });
 };
+
+const revokeApiKey = (req, res) => {
+    if (req.user.role !== "admin") {
+        return res.status(403).json({ error: "Access denied" });
+    }
+
+    const { userId } = req.params;

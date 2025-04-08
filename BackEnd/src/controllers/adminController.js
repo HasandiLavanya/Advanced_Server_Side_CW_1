@@ -18,3 +18,17 @@ const fetchUnusedApiKeys = (req, res) => {
         res.json(rows);
     });
 };
+
+const getUsers = (req, res) => {
+    if (req.user.role !== "admin") {
+        return res.status(403).json({ error: "Access denied" });
+    }
+
+    getAllUsersWithKeyCount((err, rows) => {
+        if (err) {
+            console.error("Database Error:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+        res.json(rows);
+    });
+};

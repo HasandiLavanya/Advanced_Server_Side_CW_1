@@ -5,15 +5,15 @@ const createUser = (username, hashedPassword, role, callback) => {
     const lastLoggedDate = createdAt;
 
     db.run(
-        `INSERT INTO users (username, password, role, created_at, last_logged_date) VALUES (?, ?, ?, ?, ?)`,
+        `INSERT INTO users (username, password, role, created_date, last_logged_date) VALUES (?, ?, ?, ?, ?)`,
         [username, hashedPassword, role, createdAt, lastLoggedDate],
         function (err) {
             callback(err, this ? this.lastID : null);
         }
     );
-}
+};
 
-const updateLastLoggedDate = (userId) =>{
+const updateLastLoggedDate = (userId) => {
     const lastLoggedDate = new Date().toISOString();
     db.run(`UPDATE users SET last_logged_date = ? WHERE id = ?`, [lastLoggedDate, userId]);
 };

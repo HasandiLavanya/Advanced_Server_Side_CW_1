@@ -48,12 +48,15 @@ const revokeApiKey = (req, res) => {
     });
 };
 
-const fetchUnusedApiKeys = (req, res) => {
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const formattedDate = twoDaysAgo.toISOString().slice(0, 19).replace("T", " ");
+const fetchApiKeyOwners = (req, res) => {
+    const { apiKeys } = req.body;
 
-    getUnusedApiKeys(formattedDate, (err, rows) => {
+    if (!apiKeys || apiKeys.length === 0) {
+        return res.status(400).json({ error: "No API keys provided" });
+
+    }
+
+    getApiKeyOwners(apiKeys, (err, rows) => {
         if (err) {
             console.error("Database error:", err);
             return res.status(500).json({ error: "Database error" });

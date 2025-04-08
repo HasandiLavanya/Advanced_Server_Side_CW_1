@@ -1,11 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const db = require("../config/database");
 const crypto = require("crypto");
 require("dotenv").config();
 
+const { createUser, updateLastLoggedDate, findUserByUsername } = require("../models/userModel");
+const { createApiKey, getApiKeysByUser, deleteApiKey } = require("../models/apiKeyModel");
+
 const register = (req, res) => {
     const { username, password, role, adminSecret } = req.body;
+
     let userRole = "user";
 
     if (role === "admin") {
@@ -15,5 +18,119 @@ const register = (req, res) => {
         userRole = "admin";
     }
 
-    
+    bcrypt.hash(password, 10, (err, hash) => {
+        if (err) {
+            console.error("Error hashing password:", err);
+            return res.status(500).json({ error: "Error hashing password" });
+        }
+
+        createUser(username, hash, userRole, (err) => {
+            if (err) {
+                console.error("User creation failed:", err);
+                return res.status(500).json({ error: err.message });
+            }
+            console.log("user registered sucsesfully")
+            res.status(201).json({ message: `User registered successfully as ${userRole}` });
+        });
+    });
+};
+
+const login = (req, res) => {
+    console.log('comming to the function')
+    const { username, password } = req.body;
+
+    findUserByUsername(username, (err, user) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        if (!user) return res.status(401).json({ error: "Invalid username or password" });
+
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) return res.status(500).json({ error: "Error verifying password" });
+            if (!isMatch) return res.status(401).json({ error: "Invalid username or password" });
+
+            const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+            updateLastLoggedDate(user.id);
+            console.log("user logged sucsesfully")
+            res
+                .cookie("token", token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Strict",
+                    maxAge: 60 * 60 * 1000
+                })
+                .json({ token, username: user.username, role: user.role });
+
+        });
+    });
+};
+
+const generateApiKey = (req, res) => {
+    const userId = req.user.id;
+    const apiKey = crypto.randomBytes(16).toString("hex");
+    const createdDate = new Date().toISOString();
+    const lastUsedDate = null;
+
+    createApiKey(userId, apiKey, createdDate, lastUsedDate, (err) => {
+        if (err) return res.status(500).json({ error: "Error generating API key" });
+        res.json({ apiKey, createdDate });
+    });
+};
+
+const getApiKeys = (req, res) => {
+    const userId = req.user.id;
+    getApiKeysByUser(userId, (err, rows) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        res.json({ apiKeys: rows });
+    });
+};
+
+const removeApiKey = (req, res) => {
+    const { apiKey } = req.params;
+    const userId = req.user?.id;
+
+    if (!apiKey) return res.status(400).json({ error: "API key is required in the request URL" });
+    if (!userId) return res.status(403).json({ error: "Unauthorized access" });
+
+    deleteApiKey(userId, apiKey, (err) => {
+        if (err) {
+            console.error("Error deleting API key:", err);
+            return res.status(500).json({ error: "Failed to delete API key" });
+        }
+
+        res.json({ message: "API key successfully deleted" });
+    });
+};
+
+const refreshToken = (req, res) => {
+    const token = req.cookies?.token;
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+  
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) return res.status(403).json({ error: "Invalid token" });
+  
+      const newToken = jwt.sign(
+        { id: decoded.id, role: decoded.role, username: decoded.username },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+  
+      res
+        .cookie("token", newToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "Strict",
+          maxAge: 60 * 60 * 1000
+        })
+        .json({ message: "Token refreshed" });
+    });
+  };
+  
+
+module.exports = {
+    register,
+    login,
+    generateApiKey,
+    getApiKeys,
+    deleteApiKey: removeApiKey,
+    refreshToken
 };

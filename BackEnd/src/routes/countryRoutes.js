@@ -16,3 +16,5 @@ router.get("/:name", authMiddleware, validateApiKey, async (req, res) => {
         res.status(500).json({ error: "Failed to fetch country data or log usage" });
     }
 });
+
+module.exports = router;

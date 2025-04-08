@@ -26,3 +26,5 @@ const logActionMiddleware = (action) => {
         next(); 
     };
 };
+
+router.get("/users", authMiddleware, adminMiddleware, getUsers);

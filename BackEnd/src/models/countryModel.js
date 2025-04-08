@@ -26,3 +26,5 @@ const fetchCountryInfo = async (countryName) => {
         return { error: "Failed to fetch country data", data: null };
     }
 };
+
+module.exports = { fetchCountryInfo };

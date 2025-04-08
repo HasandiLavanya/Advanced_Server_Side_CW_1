@@ -28,3 +28,5 @@ const logActionMiddleware = (action) => {
 };
 
 router.get("/users", authMiddleware, adminMiddleware, getUsers);
+
+router.get("/unused-api-keys", authMiddleware, adminMiddleware, getUnusedApiKeys);

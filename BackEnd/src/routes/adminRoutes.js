@@ -11,3 +11,18 @@ const   adminMiddleware = require("../middleware/adminMiddleware");
 const { logAdminAction } = require("../Utils/logger");
 
 const router = express.Router();
+
+const logActionMiddleware = (action) => {
+    return async (req, res, next) => {
+        const adminId = req.user.id;
+        const { userId } = req.params;
+
+        try {
+            await logAdminAction(adminId, action, userId);
+        } catch (err) {
+
+        }
+
+        next(); 
+    };
+};

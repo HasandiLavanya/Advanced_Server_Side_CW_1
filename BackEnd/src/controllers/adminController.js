@@ -64,3 +64,12 @@ const fetchApiKeyOwners = (req, res) => {
         res.json(rows);
     });
 };
+
+module.exports = {
+    getUsers,
+    revokeApiKey,
+    getUnusedApiKeys: fetchUnusedApiKeys,
+    getApiKeyOwners: fetchApiKeyOwners
+};
+
+

@@ -47,3 +47,8 @@ const revokeApiKey = (req, res) => {
         res.json({ message: "API key revoked and usage history deleted" });
     });
 };
+
+const fetchUnusedApiKeys = (req, res) => {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const formattedDate = twoDaysAgo.toISOString().slice(0, 19).replace("T", " ");

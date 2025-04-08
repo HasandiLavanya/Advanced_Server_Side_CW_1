@@ -39,3 +39,11 @@ const revokeApiKey = (req, res) => {
     }
 
     const { userId } = req.params;
+
+    deleteApiKeyAndUsageByUserId(userId, (err) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to revoke API key or usage" });
+        }
+        res.json({ message: "API key revoked and usage history deleted" });
+    });
+};

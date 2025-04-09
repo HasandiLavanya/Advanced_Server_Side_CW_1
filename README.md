@@ -113,23 +113,72 @@ Your frontend runs at `http://localhost:3001` by default.
 - Admin logs for key revocations and usage
 
 ---
+# Testing Instructions – Step by Step
 
-## Testing & Usage Tips
-
-- Use Register to create a user or admin
-- After logging in, explore respective dashboards
-- Users must select a valid API key before fetching country info
-- Admins can review unused keys and revoke them
+This guide helps you test your Secure Country Insights API Middleware project. You can test as a **normal user** or an **admin**. These steps are easy to follow and perfect for viva or manual testing.
 
 ---
 
-## Viva/Vodcast-Ready Checklist
+## Before You Start
 
-- Live demonstration of all features (User + Admin dashboards)
-- Auth with secure login + session refresh
-- Full API key management and usage
-- Secure cookie + JWT-based protection
-- Explanation of code + security design
+Make sure:
+- Backend is running on `http://localhost:3000`
+- Frontend is running on `http://localhost:3001`
+- You have registered both a user and an admin account
+
+---
+
+## Testing as a User
+
+### 1. Register a New User
+- Go to `http://localhost:3001/register`
+- Fill in a username, password, and choose **User**
+- Click Register
+
+### 2. Login as User
+- Go to `http://localhost:3001/login`
+- Enter your user login details
+- Click Login
+- You should be redirected to the **User Dashboard**
+
+### 3. Generate an API Key
+- Click **Generate API Key**
+- You will see a new key added below
+
+### 4. Search for a Country
+- Select your API key from the dropdown
+- Enter a country name (example: `Japan`)
+- Click **Fetch Country Info**
+- Country information will appear if the key is valid
+
+---
+
+## Testing as an Admin
+
+### 1. Register a New Admin
+- Go to `http://localhost:3001/register`
+- Choose a username, password, and select **Admin**
+- Click Register
+
+### 2. Login as Admin
+- Go to `http://localhost:3001/login`
+- Enter your admin details and click Login
+- You should see the **Admin Dashboard**
+
+### 3. View Users
+- On the left panel, all registered users are listed
+- You can see usernames, login dates, and key counts
+
+### 4. View Risky API Keys
+- On the right, see which keys were not used for over 2 days
+- Revoke any unused keys using the **Revoke** button
+
+### 5. Check Risky API Owners
+- The table below shows users with risky API usage
+- You can track their search counts
+
+---
+
 
 ---
 

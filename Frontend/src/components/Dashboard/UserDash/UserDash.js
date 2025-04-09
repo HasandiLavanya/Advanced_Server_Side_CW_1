@@ -34,3 +34,32 @@ const UserDashboard = () => {
           console.error("Error fetching API keys:", error);
         }
       };
+
+      const fetchCountryData = async () => {
+        if (!selectedApiKey) {
+          toast.warn("Please select an API key first!");
+          return;
+        }
+      
+        if (!country || country.trim() === "") {
+          toast.warn("Enter a country name!");
+          return;
+        }
+      
+        setLoading(true);
+      
+        try {
+          const response = await axios.get(`http://localhost:3000/countries/${country}`, {
+            withCredentials: true,
+            headers: {
+              "x-api-key": selectedApiKey
+            }
+          });
+      
+          setCountryData(response.data);
+        } catch (error) {
+          toast.error("Country not found or API issue.");
+        }
+      
+        setLoading(false);
+      };

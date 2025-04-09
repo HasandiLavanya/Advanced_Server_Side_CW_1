@@ -47,12 +47,6 @@ A full-stack secure API middleware web application built for 6COSC022W Coursewor
 cd backend
 npm install
 ```
-Create a `.env` file in the `backend/` folder:
-```env
-PORT=3000
-JWT_SECRET=your_jwt_secret_key
-ADMIN_SECRET_KEY=supersecureadminkey
-```
 Start the backend:
 ```bash
 node server.js

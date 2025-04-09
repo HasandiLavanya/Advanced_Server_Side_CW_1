@@ -119,3 +119,52 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
             </div>
+
+             {/* Right Panel - Risky API Alerts */}
+        <div className="right-panel">
+          <div className="api-alerts">
+            <h4> RISKY API KEYS</h4>
+            {unusedApiKeys.length > 0 ? (
+              <table>
+                <thead>
+                  <tr><th>API Key</th><th>Created</th><th>Last Used</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                  {unusedApiKeys.map((key, index) => (
+                    <tr key={index}>
+                      <td>************{key.api_key.slice(-4)}</td>
+                      <td>{key.created_date}</td>
+                      <td>{key.last_used_date || "Never Used"}</td>
+                      <td><button className="revoke-btn" onClick={() => revokeApiKey(key.user_id)}>Revoke</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : <p>No Risky API Keys Found.</p>}
+          </div>
+
+          <div className="api-owners">
+            <h4>RISKY API OWNERS</h4>
+            {apiKeyOwners.length > 0 ? (
+              <table>
+                <thead>
+                  <tr><th>Username</th><th>Risky APIs</th><th>Search Count</th></tr>
+                </thead>
+                <tbody>
+                  {apiKeyOwners.map((owner, index) => (
+                    <tr key={index}>
+                      <td>{owner.username}</td>
+                      <td>{owner.risky_api_count}</td>
+                      <td>{owner.search_count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : <p>No Risky API Owners.</p>}
+          </div>
+        </div>
+        <ToastContainer position="top-center" autoClose={3000} />
+      </div>
+    </div>
+  );
+};

@@ -12,3 +12,7 @@ app.use(cors({
     credentials: true               
   }));
 app.use(cookieParser());
+
+app.use("/auth", require("./src/routes/authRoutes"));
+app.use("/countries", require("./src/routes/countryRoutes"));
+app.use("/admin", require("./src/routes/adminRoutes"));

@@ -64,7 +64,7 @@ const UserDashboard = () => {
         setLoading(false);
       };
 
-      // Generate a new API key
+
   const generateApiKey = async () => {
     setLoading(true);
     try {
@@ -80,4 +80,17 @@ const UserDashboard = () => {
       toast.error("Error generating API key");
     }
     setLoading(false);
+  };
+
+   // Delete API key
+   const deleteApiKey = async (apikey) => {
+    try {
+      await axios.delete(`http://localhost:3000/auth/delete-api-key/${apikey}`, {
+        withCredentials: true
+      });
+      setApiKeys(apiKeys.filter((key) => key.api_key !== apikey));
+      toast.success("API Key deleted successfully!");
+    } catch (error) {
+      toast.error("Error deleting API key");
+    }
   };

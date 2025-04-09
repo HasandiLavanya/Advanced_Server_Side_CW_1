@@ -48,4 +48,3 @@ const MainRoutes = () => {
 };
 
 export default MainRoutes;
-s

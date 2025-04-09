@@ -13,10 +13,12 @@ app.use(cors({
   }));
 app.use(cookieParser());
 
+// Routes
 app.use("/auth", require("./src/routes/authRoutes"));
 app.use("/countries", require("./src/routes/countryRoutes"));
 app.use("/admin", require("./src/routes/adminRoutes"));
 
+// Handle undefined routes
 app.use((req, res) => {
     res.status(404).json({ error: "Route not found" });
 });

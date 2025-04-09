@@ -63,3 +63,21 @@ const UserDashboard = () => {
       
         setLoading(false);
       };
+
+      // Generate a new API key
+  const generateApiKey = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post("http://localhost:3000/auth/generate-api-key", {}, {
+        withCredentials: true
+      });
+
+      if (response.data.apiKey) {
+        setApiKeys([...apiKeys, { api_key: response.data.apiKey, created_at: new Date().toISOString() }]);
+      }
+      toast.success("New API Key generated!");
+    } catch (error) {
+      toast.error("Error generating API key");
+    }
+    setLoading(false);
+  };

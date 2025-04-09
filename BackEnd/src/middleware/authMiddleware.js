@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const authMiddleware = (req, res, next) => {
-    const token = req.cookies?.token; // ✅ Use cookie only
+    const token = req.cookies?.token;
 
     if (!token) {
         return res.status(401).json({ error: "Unauthorized: No token provided" });
@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
         }
 
         req.user = decoded;
-        console.log(`✅ JWT Validated: User ${req.user.id}`);
+        console.log(`JWT Validated: User ${req.user.id}`);
         next();
     });
 };

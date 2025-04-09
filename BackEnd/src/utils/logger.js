@@ -17,3 +17,22 @@ const logAdminAction = (adminId, action, userId) => {
         );
     });
 };
+
+const logApiUsage = (userId, endpoint) => {
+    return new Promise((resolve, reject) => {
+        db.run(
+            "INSERT INTO api_usage (user_id, endpoint, accessed_at) VALUES (?, ?, ?)",
+            [userId, endpoint, new Date().toISOString()],
+            (err) => {
+                if (err) {
+                    console.error("Failed to log API usage:", err.message);
+                    reject(err);
+                } else {
+                    console.log(`Logged API usage: User ${userId} → ${endpoint}`);
+                    resolve();
+                }
+            }
+        );
+    });
+};
+

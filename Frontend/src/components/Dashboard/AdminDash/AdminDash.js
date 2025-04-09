@@ -57,3 +57,20 @@ const AdminDashboard = () => {
           console.error("Error fetching API key owners:", error);
         }
       };
+
+      const revokeApiKey = async (userid) => {
+        if (!window.confirm("Are you sure you want to revoke this API key?")) return;
+        try {
+            await axios.delete(`http://localhost:3000/admin/api-key/${userid}`, {
+              withCredentials: true
+            });
+    
+            toast.success("API Key Revoked!");
+    
+            // Remove the revoked key from state
+            setUnusedApiKeys((prevKeys) => prevKeys.filter(key => key.user_id !== userid));
+    
+        } catch (error) {
+            console.error("Error revoking API key:", error);
+        }
+    };

@@ -36,3 +36,4 @@ const logApiUsage = (userId, endpoint) => {
     });
 };
 
+module.exports = { logAdminAction, logApiUsage };

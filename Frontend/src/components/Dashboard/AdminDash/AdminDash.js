@@ -29,3 +29,18 @@ const AdminDashboard = () => {
           console.error("Error fetching users:", error);
         }
       }, [adminUsername]);
+
+      const fetchUnusedApiKeys = useCallback(async () => {
+        try {
+          const response = await axios.get("http://localhost:3000/admin/unused-api-keys", {
+            withCredentials: true
+          });
+      
+          setUnusedApiKeys(response.data);
+          if (response.data.length > 0) {
+            fetchApiKeyOwners(response.data);
+          }
+        } catch (error) {
+          console.error("Error fetching unused API keys:", error);
+        }
+      }, []);

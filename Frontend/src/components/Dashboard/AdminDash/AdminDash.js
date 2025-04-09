@@ -74,3 +74,8 @@ const AdminDashboard = () => {
             console.error("Error revoking API key:", error);
         }
     };
+
+    const getRandomColor = () => {
+        const colors = ["#FF5733", "#33FF57", "#5733FF", "#FFC300", "#33FFF3", "#F333FF"];
+        return colors[Math.floor(Math.random() * colors.length)];
+      };

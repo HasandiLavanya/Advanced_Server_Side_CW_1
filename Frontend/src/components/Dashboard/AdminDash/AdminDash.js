@@ -44,3 +44,16 @@ const AdminDashboard = () => {
           console.error("Error fetching unused API keys:", error);
         }
       }, []);
+
+      const fetchApiKeyOwners = async (unusedKeys) => {
+        if (unusedKeys.length === 0) return;
+        try {
+          const response = await axios.post("http://localhost:3000/admin/api-key-owners", 
+            { apiKeys: unusedKeys.map(key => key.api_key) }, 
+            { withCredentials: true }
+          );
+          setApiKeyOwners(response.data);
+        } catch (error) {
+          console.error("Error fetching API key owners:", error);
+        }
+      };

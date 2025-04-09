@@ -189,3 +189,5 @@ const UserDashboard = () => {
     </div>
   );
 };
+
+export default UserDashboard;

@@ -79,3 +79,43 @@ const AdminDashboard = () => {
         const colors = ["#FF5733", "#33FF57", "#5733FF", "#FFC300", "#33FFF3", "#F333FF"];
         return colors[Math.floor(Math.random() * colors.length)];
       };
+
+      return (
+        <div className="admin-dashboard">
+          {/* Header Section */}
+          <header className="admin-header">
+            <h2>ADMIN DASHBOARD</h2>
+            <button className="logout-btn" onClick={() => navigate("/login")}>Logout</button>
+          </header>
+    
+          {/* Tiles Section */}
+          <div className="tiles-container">
+            <div className="tile"><span>{users.length}</span>TOTAL USERS</div>
+            <div className="tile"><span>{unusedApiKeys.length}</span>API KEYS NOT USED</div>
+            <div className="tile"><span>{apiKeyOwners.length}</span>RISKY API OWNERS</div>
+          </div>
+    
+          <div className="dashboard-content">
+            {/* Left Panel - User List */}
+            <div className="left-panel">
+              <h4>ALL USERS</h4>
+              <table className="a-user-table">
+                <thead>
+                  <tr><th>User</th><th>Last Logged In</th><th>API Keys</th></tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr key={index}>
+                      <td className="a-user-profile">
+                        <div className="a-profile-circle" style={{ backgroundColor: getRandomColor() }}>
+                          {user.username.slice(0, 2).toUpperCase()}
+                        </div>
+                        {user.username}
+                      </td>
+                      <td>{user.last_logged_date || "Never Logged In"}</td>
+                      <td>{user.api_key_count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>

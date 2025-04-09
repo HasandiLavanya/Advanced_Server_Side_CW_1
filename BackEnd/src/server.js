@@ -16,3 +16,7 @@ app.use(cookieParser());
 app.use("/auth", require("./src/routes/authRoutes"));
 app.use("/countries", require("./src/routes/countryRoutes"));
 app.use("/admin", require("./src/routes/adminRoutes"));
+
+app.use((req, res) => {
+    res.status(404).json({ error: "Route not found" });
+});

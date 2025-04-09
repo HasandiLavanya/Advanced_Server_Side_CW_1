@@ -16,3 +16,16 @@ const AdminDashboard = () => {
       fetchUsers();
       fetchUnusedApiKeys();
     }, []);
+
+    const fetchUsers = useCallback(async () => {
+        try {
+          const response = await axios.get("http://localhost:3000/admin/users", {
+            withCredentials: true
+          });
+      
+          const filteredUsers = response.data.filter(user => user.username !== adminUsername);
+          setUsers(filteredUsers);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      }, [adminUsername]);
